@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="MAIN" Id="{49ba8e01-0aaf-45d2-ab7f-4d1bdf3fd475}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	stEmployee : ST_Employee;
+	nStEmployeeElementCount : ULINT;
+	fbCountStructElements : FB_CountStructElements;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbCountStructElements(stAny := stEmployee, nElementsCount=> nStEmployeeElementCount ); ]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

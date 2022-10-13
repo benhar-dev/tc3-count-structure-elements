@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_CountStructElements" Id="{fe835ad0-6abd-4f9b-8ea3-c2b70aad54ae}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CountStructElements
+VAR_INPUT
+	stAny : ANY;
+END_VAR
+VAR_OUTPUT
+	nElementsCount : ULINT;
+END_VAR
+VAR
+	transform : FB_JsonReadWriteDataType;
+	datatypeName : STRING;
+	jsonStringLength : UDINT;
+	pJsonString : POINTER TO STRING;
+	parser : FB_JsonDomParser;
+	jsonDocument : SJsonValue;
+	currentMember : SJsonValue;
+	memberEnd : SJsonValue;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[nElementsCount := 0;
+
+datatypeName := transform.GetDataTypeNameByAddress(DINT_TO_UDINT(stAny.diSize),stAny.pValue);
+jsonStringLength := transform.GetSizeJsonStringFromSymbol(datatypeName,DINT_TO_UDINT(stAny.diSize),stAny.pValue);
+
+IF jsonStringLength = 0 THEN 
+	RETURN;
+END_IF
+
+pJsonString := __NEW(BYTE,jsonStringLength);
+transform.CopyJsonStringFromSymbol(datatypeName,DINT_TO_UDINT(stAny.diSize), stAny.pValue,pJsonString^,jsonStringLength);
+
+jsonDocument := parser.ParseDocument(pJsonString^);
+currentMember := parser.MemberBegin(jsonDocument);
+memberEnd := parser.MemberEnd(jsonDocument);
+
+WHILE currentMember <> memberEnd DO
+	nElementsCount := nElementsCount + 1;
+ 	currentMember := parser.NextMember(currentMember);
+END_WHILE
+
+parser.NewDocument();
+__DELETE(pJsonString);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

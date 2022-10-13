@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ST_Employee" Id="{b1d85df9-d694-42b2-9a9e-72d682de2697}">
+    <Declaration><![CDATA[TYPE ST_Employee :
+STRUCT
+	sName: STRING; 	  
+	nEmployeeID : INT;
+	nAge : INT;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
